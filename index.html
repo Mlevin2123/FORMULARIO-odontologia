@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario de Información del Negocio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0D0F14;
+      --surface:  #161A23;
+      --card:     #1C2130;
+      --border:   #2A3146;
+      --accent:   #4F6EF7;
+      --accent2:  #7B5CF5;
+      --text:     #E8ECF4;
+      --muted:    #7A87A3;
+      --success:  #34D399;
+      --error:    #F87171;
+      --radius:   14px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 16px 60px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #4F6EF7 0%, #7B5CF5 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #E8ECF4 30%, #7B5CF5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── FORM CARD ── */
+    .form-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 32px 36px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-of-type { border-bottom: none; }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title svg { flex-shrink: 0; }
+
+    /* ── GRID ── */
+    .grid { display: grid; gap: 18px; }
+    .col-2 { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 540px) { .col-2 { grid-template-columns: 1fr; } .section { padding: 24px 20px; } }
+
+    /* ── FIELD ── */
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    label .opt {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 6px;
+    }
+    input, textarea, select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 12px 15px;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    select option { background: var(--card); }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,110,247,.15);
+    }
+    textarea { resize: vertical; min-height: 100px; }
+
+    /* ── CHECKBOX GROUP ── */
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 400px) { .check-grid { grid-template-columns: 1fr; } }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 13px;
+      cursor: pointer;
+      transition: border-color .2s;
+      font-size: 13px;
+    }
+    .check-item:has(input:checked) { border-color: var(--accent); background: rgba(79,110,247,.08); }
+    .check-item input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── SUBMIT ── */
+    .footer-section {
+      padding: 28px 36px;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    @media (max-width: 540px) { .footer-section { padding: 24px 20px; } }
+    button[type="submit"] {
+      width: 100%;
+      max-width: 360px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px 24px;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      letter-spacing: .5px;
+    }
+    button[type="submit"]:hover { opacity: .88; transform: translateY(-1px); }
+    button[type="submit"]:active { transform: translateY(0); }
+    button[type="submit"]:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── STATUS ── */
+    #status {
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      display: none;
+      width: 100%;
+      max-width: 360px;
+    }
+    #status.success { background: rgba(52,211,153,.12); color: var(--success); border: 1px solid rgba(52,211,153,.3); display: block; }
+    #status.error   { background: rgba(248,113,113,.12); color: var(--error);   border: 1px solid rgba(248,113,113,.3); display: block; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="badge">Nuevo Cliente</div>
+  <h1>Cuéntanos sobre tu negocio</h1>
+  <p class="sub">Completa la información que tengas disponible. Ningún campo es obligatorio — entre más compartas, mejor podremos ayudarte.</p>
+</header>
+
+<div class="form-wrap">
+
+  <!-- 1. DATOS GENERALES -->
+  <div class="section">
+    <div class="section-title">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21H5a2 2 0 01-2-2V7l7-4 7 4v12a2 2 0 01-2 2z"/></svg>
+      Datos del negocio
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>Nombre del negocio <span class="opt">(opcional)</span></label>
+        <input type="text" id="nombre" placeholder="Ej. Pastelería La Dulce Vida">
+      </div>
+      <div class="grid col-2">
+        <div class="field">
+          <label>Tipo de negocio <span class="opt">(opcional)</span></label>
+          <select id="tipo">
+            <option value="">Seleccionar...</option>
+            <option>Restaurante / Cafetería</option>
+            <option>Tienda / Retail</option>
+            <option>Servicios profesionales</option>
+            <option>Salud y bienestar</option>
+            <option>Educación</option>
+            <option>Tecnología</option>
+            <option>Construcción / Remodelación</option>
+            <option>Belleza / Estética</option>
+            <option>Consultoría</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>¿Cuánto tiempo llevan operando? <span class="opt">(opcional)</span></label>
+          <select id="antiguedad">
+            <option value="">Seleccionar...</option>
+            <option>Menos de 1 año</option>
+            <option>1–3 años</option>
+            <option>3–5 años</option>
+            <option>Más de 5 años</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>¿Qué hacen / qué ofrecen? <span class="opt">(opcional)</span></label>
+        <textarea id="descripcion" placeholder="Breve descripción de sus productos o servicios..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CONTACTO -->
+  <div class="section">
+    <div class="section-title">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Información de contacto
+    </div>
+    <div class="grid">
+      <div class="grid col-2">
+        <div class="field">
+          <label>Nombre de contacto <span class="opt">(opcional)</span></label>
+          <input type="text" id="contacto" placeholder="Tu nombre">
+        </div>
+        <div class="field">
+          <label>Teléfono / WhatsApp <span class="opt">(opcional)</span></label>
+          <input type="tel" id="telefono" placeholder="+503 7000-0000">
+        </div>
+      </div>
+      <div class="field">
+        <label>Correo electrónico <span class="opt">(opcional)</span></label>
+        <input type="email" id="email" placeholder="negocio@ejemplo.com">
+      </div>
+      <div class="field">
+        <label>Dirección / Ubicación <span class="opt">(opcional)</span></label>
+        <input type="text" id="ubicacion" placeholder="Ej. Santa Tecla, La Libertad">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. REDES SOCIALES -->
+  <div class="section">
+    <div class="section-title">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+      Presencia en línea
+    </div>
+    <div class="grid">
+      <div class="grid col-2">
+        <div class="field">
+          <label>Facebook <span class="opt">(opcional)</span></label>
+          <input type="url" id="facebook" placeholder="facebook.com/tunegocio">
+        </div>
+        <div class="field">
+          <label>Instagram <span class="opt">(opcional)</span></label>
+          <input type="url" id="instagram" placeholder="instagram.com/tunegocio">
+        </div>
+        <div class="field">
+          <label>TikTok <span class="opt">(opcional)</span></label>
+          <input type="url" id="tiktok" placeholder="tiktok.com/@tunegocio">
+        </div>
+        <div class="field">
+          <label>Sitio web actual <span class="opt">(opcional)</span></label>
+          <input type="url" id="web_actual" placeholder="www.ejemplo.com">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SITIO WEB -->
+  <div class="section">
+    <div class="section-title">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Sobre el sitio web
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>¿Para qué quieren el sitio web? <span class="opt">(opcional)</span></label>
+        <div class="check-grid">
+          <label class="check-item"><input type="checkbox" class="proposito" value="Mostrar información del negocio"> Mostrar información</label>
+          <label class="check-item"><input type="checkbox" class="proposito" value="Vender productos en línea"> Vender en línea</label>
+          <label class="check-item"><input type="checkbox" class="proposito" value="Agendar citas o reservas"> Agendar citas</label>
+          <label class="check-item"><input type="checkbox" class="proposito" value="Mostrar portafolio"> Portafolio</label>
+          <label class="check-item"><input type="checkbox" class="proposito" value="Generar leads / contactos"> Captar contactos</label>
+          <label class="check-item"><input type="checkbox" class="proposito" value="Blog o contenido"> Blog / contenido</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Colores o estilo que prefieren <span class="opt">(opcional)</span></label>
+        <input type="text" id="colores" placeholder="Ej. azul y blanco, moderno, minimalista...">
+      </div>
+      <div class="field">
+        <label>¿Tienen logo o materiales de marca? <span class="opt">(opcional)</span></label>
+        <select id="logo">
+          <option value="">Seleccionar...</option>
+          <option>Sí, tenemos logo y guía de marca</option>
+          <option>Sí, solo el logo</option>
+          <option>No, necesitamos diseño desde cero</option>
+          <option>En proceso</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>¿Tienen dominio o hosting? <span class="opt">(opcional)</span></label>
+        <select id="dominio">
+          <option value="">Seleccionar...</option>
+          <option>Sí, tenemos los dos</option>
+          <option>Solo dominio</option>
+          <option>Solo hosting</option>
+          <option>No, necesitamos ambos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sitios de referencia que les gustan <span class="opt">(opcional)</span></label>
+        <textarea id="referencias" placeholder="URLs o nombres de sitios web que admiran..." style="min-height:80px"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CONTEXTO ADICIONAL -->
+  <div class="section">
+    <div class="section-title">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Información adicional
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label>¿Cuál es su público objetivo? <span class="opt">(opcional)</span></label>
+        <input type="text" id="publico" placeholder="Ej. mujeres 25–40, empresas medianas, jóvenes universitarios...">
+      </div>
+      <div class="grid col-2">
+        <div class="field">
+          <label>Presupuesto aproximado <span class="opt">(opcional)</span></label>
+          <select id="presupuesto">
+            <option value="">Seleccionar...</option>
+            <option>Menos de $300</option>
+            <option>$300 – $600</option>
+            <option>$600 – $1,000</option>
+            <option>$1,000 – $2,000</option>
+            <option>Más de $2,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>¿Cuándo necesitan el sitio? <span class="opt">(opcional)</span></label>
+          <select id="plazo">
+            <option value="">Seleccionar...</option>
+            <option>Lo antes posible</option>
+            <option>En 1 mes</option>
+            <option>En 1–3 meses</option>
+            <option>Sin prisa</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>¿Algo más que quieran compartir? <span class="opt">(opcional)</span></label>
+        <textarea id="notas" placeholder="Preguntas, ideas, necesidades especiales..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="footer-section">
+    <button type="submit" id="btnEnviar" onclick="enviarFormulario()">
+      Enviar información →
+    </button>
+    <div id="status"></div>
+  </div>
+
+</div>
+
+<script>
+  const TG_TOKEN   = '8237099777:AAGIzOIWxYyR37fZQKjBSGUBUQak6pOn24Q';
+  const TG_CHAT_ID = '5257502158';
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  function getCheckboxValues(cls) {
+    return [...document.querySelectorAll('.' + cls + ':checked')]
+      .map(cb => cb.value).join(', ') || '—';
+  }
+
+  function row(label, value) {
+    if (!value || value === '—') return `\n▫️ *${label}:* —`;
+    return `\n✅ *${label}:* ${value}`;
+  }
+
+  async function enviarFormulario() {
+    const btn = document.getElementById('btnEnviar');
+    const status = document.getElementById('status');
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    status.className = '';
+    status.style.display = 'none';
+
+    const fecha = new Date().toLocaleString('es-SV', { dateStyle: 'full', timeStyle: 'short' });
+
+    const msg =
+`🏢 *NUEVO FORMULARIO DE NEGOCIO*
+📅 ${fecha}
+
+━━━━━━━━━━━━━━━━━━
+🗂 *DATOS DEL NEGOCIO*${
+  row('Nombre', val('nombre'))}${
+  row('Tipo', val('tipo'))}${
+  row('Antigüedad', val('antiguedad'))}${
+  row('Descripción', val('descripcion'))}
+
+━━━━━━━━━━━━━━━━━━
+📬 *CONTACTO*${
+  row('Contacto', val('contacto'))}${
+  row('Teléfono', val('telefono'))}${
+  row('Email', val('email'))}${
+  row('Ubicación', val('ubicacion'))}
+
+━━━━━━━━━━━━━━━━━━
+🌐 *REDES SOCIALES*${
+  row('Facebook', val('facebook'))}${
+  row('Instagram', val('instagram'))}${
+  row('TikTok', val('tiktok'))}${
+  row('Sitio actual', val('web_actual'))}
+
+━━━━━━━━━━━━━━━━━━
+💻 *SITIO WEB*${
+  row('Propósito', getCheckboxValues('proposito'))}${
+  row('Colores / Estilo', val('colores'))}${
+  row('Logo / Marca', val('logo'))}${
+  row('Dominio / Hosting', val('dominio'))}${
+  row('Referencias', val('referencias'))}
+
+━━━━━━━━━━━━━━━━━━
+📊 *CONTEXTO*${
+  row('Público objetivo', val('publico'))}${
+  row('Presupuesto', val('presupuesto'))}${
+  row('Plazo', val('plazo'))}${
+  row('Notas adicionales', val('notas'))}
+━━━━━━━━━━━━━━━━━━`;
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          text: msg,
+          parse_mode: 'Markdown'
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        status.className = 'success';
+        status.textContent = '✅ ¡Información enviada con éxito! Te contactaremos pronto.';
+        // Limpiar form
+        document.querySelectorAll('input, textarea, select').forEach(el => {
+          if (el.type === 'checkbox') el.checked = false;
+          else el.value = '';
+        });
+      } else {
+        throw new Error(data.description || 'Error al enviar');
+      }
+    } catch (err) {
+      status.className = 'error';
+      status.textContent = '❌ Hubo un error al enviar. Intenta de nuevo o contáctanos directamente.';
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enviar información →';
+      status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+</script>
+
+</body>
+</html>
